@@ -1,14 +1,15 @@
 package com.elallouch.ebankingbackend;
 
-import com.elallouch.ebankingbackend.entities.AccountOperation;
-import com.elallouch.ebankingbackend.entities.CurrentAccount;
-import com.elallouch.ebankingbackend.entities.Customer;
-import com.elallouch.ebankingbackend.entities.SavingAccount;
+import com.elallouch.ebankingbackend.entities.*;
 import com.elallouch.ebankingbackend.enums.AccountStatus;
 import com.elallouch.ebankingbackend.enums.OperationType;
+import com.elallouch.ebankingbackend.exceptions.BalanceNotSufficientException;
+import com.elallouch.ebankingbackend.exceptions.BankAccountNotFoundException;
+import com.elallouch.ebankingbackend.exceptions.CustomerNotFoundException;
 import com.elallouch.ebankingbackend.repositories.AccountOperationRepository;
 import com.elallouch.ebankingbackend.repositories.BankAccountRepository;
 import com.elallouch.ebankingbackend.repositories.CustomerRepository;
+import com.elallouch.ebankingbackend.services.BankAccountService;
 import com.elallouch.ebankingbackend.services.BankService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,6 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -27,9 +29,31 @@ public class EbankingBackendApplication {
     }
 
     @Bean
-    CommandLineRunner commandLineRunner(BankService bankService){
+    CommandLineRunner commandLineRunner(BankAccountService bankAccountService){
         return args -> {
-            bankService.consulter();
+            Stream.of("Ayoub", "Imane", "Mohamed").forEach(name -> {
+                Customer customer = new Customer();
+                customer.setName(name);
+                customer.setEmail(name + "@gmail.com");
+                bankAccountService.saveCustomer(customer);
+            });
+            bankAccountService.listCustomers().forEach(customer -> {
+                try {
+                    bankAccountService.saveCurrentBankAccount(Math.random() * 90000, 9000, customer.getId());
+                    bankAccountService.saveSavingBankAccount(Math.random() * 120000, 5.5, customer.getId());
+                    List<BankAccount> bankAccounts = bankAccountService.bankAccountList();
+                    for (BankAccount bankAccount : bankAccounts) {
+                        for (int i = 0; i < 10; i++) {
+                            bankAccountService.credit(bankAccount.getId(), 10000 + Math.random() * 120000, "Credit");
+                            bankAccountService.debit(bankAccount.getId(), 1000 + Math.random() * 9000, "Debit");
+                        }
+                    }
+                } catch (CustomerNotFoundException e) {
+                    e.printStackTrace();
+                } catch (BankAccountNotFoundException | BalanceNotSufficientException e) {
+                    e.printStackTrace();
+                }
+            });
         };
     }
 
