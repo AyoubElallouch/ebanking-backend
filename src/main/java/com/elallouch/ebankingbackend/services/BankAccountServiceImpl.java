@@ -29,8 +29,7 @@ public class BankAccountServiceImpl implements BankAccountService{
     private AccountOperationRepository accountOperationRepository;
     //Logger log= LoggerFactory.getLogger(this.getClass().getName());
 
-    public BankAccountServiceImpl() {
-    }
+
 
     @Override
     public Customer saveCustomer(Customer customer) {

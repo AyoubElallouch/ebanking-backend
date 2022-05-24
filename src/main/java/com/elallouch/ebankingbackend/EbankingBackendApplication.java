@@ -29,13 +29,14 @@ public class EbankingBackendApplication {
     }
 
     @Bean
-    CommandLineRunner commandLineRunner(BankAccountService bankAccountService){
+    CommandLineRunner commandLineRunner (BankAccountService bankAccountService){
         return args -> {
-            Stream.of("Ayoub", "Imane", "Mohamed").forEach(name -> {
+            Stream.of("Imane", "Ayoub", "Sami").forEach(name -> {
                 Customer customer = new Customer();
                 customer.setName(name);
                 customer.setEmail(name + "@gmail.com");
                 bankAccountService.saveCustomer(customer);
+
             });
             bankAccountService.listCustomers().forEach(customer -> {
                 try {
