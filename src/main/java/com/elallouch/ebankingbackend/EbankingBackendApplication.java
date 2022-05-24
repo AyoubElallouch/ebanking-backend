@@ -1,5 +1,6 @@
 package com.elallouch.ebankingbackend;
 
+import com.elallouch.ebankingbackend.dtos.CustomerDTO;
 import com.elallouch.ebankingbackend.entities.*;
 import com.elallouch.ebankingbackend.enums.AccountStatus;
 import com.elallouch.ebankingbackend.enums.OperationType;
@@ -32,7 +33,7 @@ public class EbankingBackendApplication {
     CommandLineRunner commandLineRunner (BankAccountService bankAccountService){
         return args -> {
             Stream.of("Imane", "Ayoub", "Sami").forEach(name -> {
-                Customer customer = new Customer();
+                CustomerDTO customer = new CustomerDTO();
                 customer.setName(name);
                 customer.setEmail(name + "@gmail.com");
                 bankAccountService.saveCustomer(customer);
