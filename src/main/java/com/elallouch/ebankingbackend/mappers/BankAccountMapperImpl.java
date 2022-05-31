@@ -16,9 +16,6 @@ public class BankAccountMapperImpl {
     public CustomerDTO fromCustomer(Customer customer) {
         CustomerDTO customerDTO = new CustomerDTO();
         BeanUtils.copyProperties(customer, customerDTO);
-        //customerDTO.setId(customer.getId());
-        //customerDTO.setName(customer.getName());
-        //customerDTO.setEmail(customer.getEmail());
         return customerDTO;
 
     }
@@ -62,7 +59,7 @@ public class BankAccountMapperImpl {
     }
     public AccountOperationDTO fromAccountOperation(AccountOperation accountOperation){
         AccountOperationDTO accountOperationDTO=new AccountOperationDTO();
-        BeanUtils.copyProperties(accountOperationDTO,accountOperationDTO);
+        BeanUtils.copyProperties(accountOperation,accountOperationDTO);
         return accountOperationDTO;
     }
 }
