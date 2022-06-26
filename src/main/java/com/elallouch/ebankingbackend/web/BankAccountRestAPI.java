@@ -1,10 +1,9 @@
 package com.elallouch.ebankingbackend.web;
 
 
-import com.elallouch.ebankingbackend.dtos.AccountHistoryDTO;
-import com.elallouch.ebankingbackend.dtos.AccountOperationDTO;
-import com.elallouch.ebankingbackend.dtos.BankAccountDTO;
+import com.elallouch.ebankingbackend.dtos.*;
 import com.elallouch.ebankingbackend.entities.BankAccount;
+import com.elallouch.ebankingbackend.exceptions.BalanceNotSufficientException;
 import com.elallouch.ebankingbackend.exceptions.BankAccountNotFoundException;
 import com.elallouch.ebankingbackend.services.BankAccountService;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +39,26 @@ public class BankAccountRestAPI {
             @RequestParam(name="size",defaultValue = "5")int size) throws BankAccountNotFoundException {
         AccountHistoryDTO accountHistory = bankAccountService.getAccountHistory(accountId, page, size);
         return accountHistory;
+    }
+    @PostMapping("/accounts/debit")
+    public DebitDTO debit(@RequestBody DebitDTO debitDTO) throws BankAccountNotFoundException, BalanceNotSufficientException {
+        this.bankAccountService.debit(debitDTO.getAccountId(),debitDTO.getAmount(),debitDTO.getDescription());
+        return debitDTO;
+
+    }
+    @PostMapping("/accounts/credit")
+    public CreditDTO credit(@RequestBody CreditDTO creditDTO) throws BankAccountNotFoundException, BalanceNotSufficientException {
+        this.bankAccountService.credit(creditDTO.getAccountId(),creditDTO.getAmount(),creditDTO.getDescription());
+        return creditDTO;
+
+    }
+    @PostMapping("/accounts/transfer")
+    public void TransferRequestDTO(@RequestBody TransferRequestDTO transferRequestDTO) throws BankAccountNotFoundException, BalanceNotSufficientException {
+        this.bankAccountService.transfer(
+                transferRequestDTO.getAccountSource(),
+                transferRequestDTO.getAccountDestination(),
+                transferRequestDTO.getAmount());
+
     }
 }
 

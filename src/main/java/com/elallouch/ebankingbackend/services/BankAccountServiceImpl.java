@@ -17,9 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -197,4 +195,27 @@ public class BankAccountServiceImpl implements BankAccountService {
         List<CustomerDTO> customerDTOS = customers.stream().map(cust -> dtoMapper.fromCustomer(cust)).collect(Collectors.toList());
         return customerDTOS;
     }
+    @Override
+    public List<CustomerBankAccount> bankAccountByCustomer(Long customer_id) throws BankAccountNotFoundException {
+        List<BankAccount> bankAccounts = bankAccountRepository.findAll();
+        List<CustomerBankAccount> bankAccountList = new ArrayList<>();
+        for (BankAccount ba: bankAccounts){
+            Customer customer = ba.getCustomer();
+            if(customer.getId() == customer_id)
+            {
+
+                if(ba instanceof SavingAccount)
+                {
+                    bankAccountList.add(new CustomerBankAccount(ba.getId(), "SavingAccount"));
+                }
+                else
+                {
+                    bankAccountList.add(new CustomerBankAccount(ba.getId(), "CurrentAccount"));
+                }
+            }
+
+        }
+        return bankAccountList;
+    }
+
 }

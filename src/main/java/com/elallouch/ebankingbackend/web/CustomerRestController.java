@@ -1,7 +1,8 @@
 package com.elallouch.ebankingbackend.web;
 
 import com.elallouch.ebankingbackend.dtos.CustomerDTO;
-import com.elallouch.ebankingbackend.entities.Customer;
+import com.elallouch.ebankingbackend.dtos.CustomerBankAccount;
+import com.elallouch.ebankingbackend.exceptions.BankAccountNotFoundException;
 import com.elallouch.ebankingbackend.exceptions.CustomerNotFoundException;
 import com.elallouch.ebankingbackend.services.BankAccountService;
 import lombok.AllArgsConstructor;
@@ -44,5 +45,13 @@ public class CustomerRestController {
     public void deleteCustomer(@PathVariable Long id){
         bankAccountService.deleteCustomer(id);
 
+    }
+   /*@GetMapping("/customers/accounts/{id}")
+    public Map<String, String> getCustomerAccounts(@PathVariable(name = "id") Long id) throws CustomerNotFoundException, BankAccountNotFoundException {
+        return bankAccountService.bankAccountByCustomer(id);
+    }*/
+    @GetMapping("/customers/accounts/{id}")
+    public List<CustomerBankAccount> getCustomerAccounts(@PathVariable(name = "id") Long id) throws CustomerNotFoundException, BankAccountNotFoundException {
+        return bankAccountService.bankAccountByCustomer(id);
     }
 }
