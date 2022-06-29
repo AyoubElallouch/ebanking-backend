@@ -46,10 +46,6 @@ public class CustomerRestController {
         bankAccountService.deleteCustomer(id);
 
     }
-   /*@GetMapping("/customers/accounts/{id}")
-    public Map<String, String> getCustomerAccounts(@PathVariable(name = "id") Long id) throws CustomerNotFoundException, BankAccountNotFoundException {
-        return bankAccountService.bankAccountByCustomer(id);
-    }*/
     @GetMapping("/customers/accounts/{id}")
     public List<CustomerBankAccount> getCustomerAccounts(@PathVariable(name = "id") Long id) throws CustomerNotFoundException, BankAccountNotFoundException {
         return bankAccountService.bankAccountByCustomer(id);
