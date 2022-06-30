@@ -1,7 +1,6 @@
 package com.elallouch.ebankingbackend.dtos;
 
 import lombok.Data;
-
 @Data
 public class CustomerBankAccount {
     String id;
